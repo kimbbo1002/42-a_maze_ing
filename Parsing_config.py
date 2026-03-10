@@ -15,7 +15,8 @@ def check_config() -> Dict[ConfigOptions, Any]:
     print("\n=== Analyzing Configurations ===\n")
     if not len(sys.argv) == 2:
         raise ValueError(
-            f"{Colors.RED}ERROR: {Colors.RESET}Wrong number of arguments were input.\n"
+            f"{Colors.RED}ERROR: "
+            f"{Colors.RESET}Wrong number of arguments were input.\n"
             "(command example) python3 a_maze_ing.py config.txt"
         )
     file_name = sys.argv[1]
@@ -55,24 +56,29 @@ def check_config() -> Dict[ConfigOptions, Any]:
 
                 except Exception:
                     raise ValueError(
-                        f"{Colors.RED}ERROR: {Colors.RESET}Wrong configuration formatting.\n"
+                        f"{Colors.RED}ERROR: "
+                        f"{Colors.RESET}Wrong configuration formatting.\n"
                         "Mandatory keys with example values:\n"
-                        "WIDTH=20\nHEIGHT=15\nENTRY=0,0\nEXIT=19,14\nOUTPUT_FILE=maze.txt\nPERFECT=True"
+                        "WIDTH=20\nHEIGHT=15\nENTRY=0,0\n"
+                        "EXIT=19,14\nOUTPUT_FILE=maze.txt\nPERFECT=True"
                     )
-        
+
         if not any((width, height, entry, exit, output, perfect)):
             raise ValueError(
-                f"{Colors.RED}ERROR: {Colors.RESET}Mandatory key missing.\n"
+                f"{Colors.RED}ERROR: "
+                f"{Colors.RESET}Mandatory key missing.\n"
                 "Mandatory keys with example values:\n"
-                "WIDTH=20\nHEIGHT=15\nENTRY=0,0\nEXIT=19,14\nOUTPUT_FILE=maze.txt\nPERFECT=True"
+                "WIDTH=20\nHEIGHT=15\nENTRY=0,0\n"
+                "EXIT=19,14\nOUTPUT_FILE=maze.txt\nPERFECT=True"
             )
-                
+
     except FileNotFoundError:
         raise FileNotFoundError(
-            f"{Colors.RED}ERROR: {Colors.RESET}File ({file_name}) could not be found.\n"
+            f"{Colors.RED}ERROR: "
+            f"{Colors.RESET}File ({file_name}) could not be found.\n"
             "Make sure the file exists."
         )
-    
+
     # check impossible maze parameters
     if (
         width <= 0 or height <= 0
@@ -81,13 +87,17 @@ def check_config() -> Dict[ConfigOptions, Any]:
         or entry == exit
     ):
         raise ValueError(
-            f"{Colors.RED}ERROR: {Colors.RESET}Impossible maze parameter detected.\n"
-            "Check if ...\n" \
-            "1) Width and Height are not equal or below 0\n" \
+            f"{Colors.RED}ERROR: "
+            f"{Colors.RESET}Impossible maze parameter detected.\n"
+            "Check if ...\n"
+            "1) Width and Height are not equal or below 0\n"
             "2) Entry and Exit coordinates belong in the maze\n"
             "3) Entry and Exit are not the same coordinates"
         )
-    print(f"{Colors.GREEN}SUCCESS: {Colors.RESET}Configuration file successfully analyzed.")
+    print(
+        f"{Colors.GREEN}SUCCESS: "
+        f"{Colors.RESET}Configuration file successfully analyzed."
+    )
     return {
         ConfigOptions.WIDTH: width,
         ConfigOptions.HEIGHT: height,
