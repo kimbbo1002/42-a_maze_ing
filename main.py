@@ -15,8 +15,17 @@ def main() -> None:
 
         # phase2: generating random maze
         maze = Maze(config)
+        maze.set_seed(42)
         maze.generate_maze()
+        print(
+            f"{Colors.GREEN}SUCCESS: "
+            f"{Colors.RESET}Maze generated."
+        )
         maze.display_maze()
+        print(
+            f"{Colors.GREEN}SUCCESS: "
+            f"{Colors.RESET}Maze displayed to {config[ConfigOptions.OUTPUT_FILE].strip()}."
+        )
         
     except Exception as e:
         print(e)

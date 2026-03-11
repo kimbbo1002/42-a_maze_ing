@@ -16,7 +16,7 @@ class Cell:
         self.visited = False
         self.fortytwo = False
 
-    def display(self, file_name: str) -> None:
+    def display(self) -> str:
         bit = 0
         if self.walls['N']:
             bit |= 1
@@ -27,29 +27,38 @@ class Cell:
         if self.walls['W']:
             bit |= 1 << 3
         
-        with open(file_name, 'a') as file:
-            file.write(format(bit, 'X'))
+        return (format(bit, 'X'))
 
-    def check_cell(self, x: int, y: int, cols: int, rows: int, grid_cells: list) -> Cell:
+    @staticmethod
+    def check_cell(x: int, y: int, cols: int, rows: int, grid_cells: list) -> Cell | bool:
         find_index = lambda x, y: x + y * cols # 2D grid into a 1D list
         if x < 0 or x > cols - 1 or y < 0 or y > rows - 1:
             return False
         return grid_cells[find_index(x, y)]
     
+    def is_large_open_area(self, x: int, y: int, cols: int, rows: int, grid_cells: list) -> bool:
+        count = 0
+        for dy in range(-1, 2):
+            for dx in range(-1, 2):
+                nx = x + dx
+                ny = y + dy
+                if 0 <= nx < cols and 0 <= ny < rows:
+                    if not Cell.check_cell(nx, ny, cols, rows, grid_cells).visited:
+                        continue
+                    count += 1
+        return count >= 9
+
     def check_neighbors(self, cols: int, rows: int, grid_cells: list) -> Cell | bool:
         neighbors = []
-        top = self.check_cell(self.x, self.y - 1, cols, rows, grid_cells)
-        bottom = self.check_cell(self.x, self.y + 1, cols, rows, grid_cells)
-        right = self.check_cell(self.x + 1, self.y, cols, rows, grid_cells)
-        left = self.check_cell(self.x - 1, self.y, cols, rows, grid_cells)
-        if top and not top.visited and not top.fortytwo: 
-            neighbors.append(top)
-        if bottom and not bottom.visited and not bottom.fortytwo:
-            neighbors.append(bottom)
-        if right and not right.visited and not right.fortytwo:
-            neighbors.append(right)
-        if left and not left.visited and not left.fortytwo:
-            neighbors.append(left)
+        top = Cell.check_cell(self.x, self.y - 1, cols, rows, grid_cells)
+        bottom = Cell.check_cell(self.x, self.y + 1, cols, rows, grid_cells)
+        right = Cell.check_cell(self.x + 1, self.y, cols, rows, grid_cells)
+        left = Cell.check_cell(self.x - 1, self.y, cols, rows, grid_cells)
+        for n in [top, bottom, right, left]:
+            if n and not n.visited and not n.fortytwo:
+                if n.is_large_open_area(n.x, n.y, cols, rows, grid_cells):
+                    continue
+                neighbors.append(n)
         
         return random.choice(neighbors) if neighbors else False
     

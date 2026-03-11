@@ -13,7 +13,7 @@ def check_config() -> Dict[ConfigOptions, Any]:
     perfect: bool
     fortytwo: bool
 
-    print("\n=== Analyzing Configurations ===\n")
+    print("\n[Analyzing Configurations ...]")
     if not len(sys.argv) == 2:
         raise ValueError(
             f"{Colors.RED}ERROR: "
@@ -63,7 +63,9 @@ def check_config() -> Dict[ConfigOptions, Any]:
                         "EXIT=19,14\nOUTPUT_FILE=maze.txt\nPERFECT=True"
                     )
 
-        if not any((width, height, entry, exit, output, perfect)):
+        try:
+            _ = (width, height, entry, exit, output, perfect):
+        except UnboundLocalError:
             raise ValueError(
                 f"{Colors.RED}ERROR: "
                 f"{Colors.RESET}Mandatory key missing.\n"
@@ -95,7 +97,7 @@ def check_config() -> Dict[ConfigOptions, Any]:
             "3) Entry and Exit are not the same coordinates"
         )
     
-    # check if 42 fits
+    # check if 42 pattern fits
     if width < 9 or height < 7:
         fortytwo = False
         print(
@@ -114,7 +116,7 @@ def check_config() -> Dict[ConfigOptions, Any]:
         ConfigOptions.HEIGHT: height,
         ConfigOptions.ENTRY: entry,
         ConfigOptions.EXIT: exit,
-        ConfigOptions.OUTPUT_FILE: output,
+        ConfigOptions.OUTPUT_FILE: output.strip(),
         ConfigOptions.PERFECT: perfect,
         ConfigOptions.FORTYTWO: fortytwo
     }

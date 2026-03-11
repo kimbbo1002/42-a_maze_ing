@@ -11,6 +11,16 @@ class Maze:
         self.cols = config[ConfigOptions.WIDTH]
         self.rows = config[ConfigOptions.HEIGHT]
         self.grid_cells = [Cell(col, row) for row in range(self.rows) for col in range(self.cols)]
+        self.seed = random.choice(range(1000))
+        self.display = ""
+    
+    def set_seed(self, seed: int) -> None:
+        print(f"\n[Setting Seed ...]")
+        self.seed = seed
+        print(
+            f"{Colors.GREEN}SUCCESS: "
+            f"{Colors.RESET}Seed setted to {seed}."
+        )
     
     def remove_walls(self, current: Cell, next: Cell) -> None:
         dx = current.x - next.x
@@ -26,64 +36,82 @@ class Maze:
             current.knock_down_wall(next, 'S')
     
     def generate_maze(self) -> None:
+        print("\n[Generating Maze ...]")
         if self.config[ConfigOptions.FORTYTWO]:
             self.add_42_pattern()
-        current_cell = self.grid_cells[0]
-        array = []
+        entry_x, entry_y = self.config[ConfigOptions.ENTRY]
+        current_cell = Cell.check_cell(entry_x, entry_y, self.cols, self.rows, self.grid_cells)
+        stack = []
         cell_count = 1
-        while cell_count != len(self.grid_cells):
+        target = len([c for c in self.grid_cells if not c.fortytwo])
+        random.seed(self.seed)
+        while cell_count < target:
             current_cell.visited = True
             next_cell = current_cell.check_neighbors(self.cols, self.rows, self.grid_cells)
             if next_cell:
                 next_cell.visited = True
                 cell_count += 1
-                array.append(current_cell)
+                stack.append(current_cell)
                 self.remove_walls(current_cell, next_cell)
                 current_cell = next_cell
-            elif array:
-                current_cell = array.pop()
+            elif stack:
+                current_cell = stack.pop()
     
     def check_cell(self, x: int, y:int) -> Cell:
-        find_index = lambda x, y: x + y * self.cols # 2D grid into a 1D list
-        if x < 0 or x > self.cols - 1 or y < 0 or y > self.rows - 1:
-            return False
+        find_index = lambda x, y: x + y * self.cols
         return self.grid_cells[find_index(x, y)]
 
     def add_42_pattern(self) -> None:
         
         mid_x = self.cols // 2
         mid_y = self.rows // 2
+        
+        pattern_coordinates = [
+            (mid_x - 3, mid_y - 2),
+            (mid_x - 3, mid_y - 1),
+            (mid_x - 3, mid_y),
+            (mid_x - 2, mid_y),
+            (mid_x - 1, mid_y),
+            (mid_x - 1, mid_y + 1),
+            (mid_x - 1, mid_y + 2),
+            (mid_x + 1, mid_y - 2),
+            (mid_x + 2, mid_y - 2),
+            (mid_x + 3, mid_y - 2),
+            (mid_x + 3, mid_y - 1),
+            (mid_x + 3, mid_y),
+            (mid_x + 2, mid_y),
+            (mid_x + 1, mid_y),
+            (mid_x + 1, mid_y + 1),
+            (mid_x + 1, mid_y + 2),
+            (mid_x + 2, mid_y + 2),
+            (mid_x + 3, mid_y + 2)
+        ]
 
-        self.check_cell(mid_x - 3, mid_y - 2).fortytwo = True
-        self.check_cell(mid_x - 3, mid_y - 1).fortytwo = True
-        self.check_cell(mid_x - 3, mid_y).fortytwo = True
-        self.check_cell(mid_x - 2, mid_y).fortytwo = True
-        self.check_cell(mid_x - 1, mid_y).fortytwo = True
-        self.check_cell(mid_x - 1, mid_y + 1).fortytwo = True
-        self.check_cell(mid_x - 1, mid_y + 2).fortytwo = True
-
-        self.check_cell(mid_x + 1, mid_y + 2).fortytwo = True
-        self.check_cell(mid_x + 2, mid_y + 2).fortytwo = True
-        self.check_cell(mid_x + 3, mid_y + 2).fortytwo = True
-        self.check_cell(mid_x + 3, mid_y + 1).fortytwo = True
-        self.check_cell(mid_x + 3, mid_y).fortytwo = True
-        self.check_cell(mid_x + 2, mid_y).fortytwo = True
-        self.check_cell(mid_x + 1, mid_y).fortytwo = True
-        self.check_cell(mid_x + 1, mid_y - 1).fortytwo = True
-        self.check_cell(mid_x + 1, mid_y - 2).fortytwo = True
-        self.check_cell(mid_x + 2, mid_y - 2).fortytwo = True
-        self.check_cell(mid_x + 3, mid_y - 2).fortytwo = True
+        for x, y in pattern_coordinates:
+            Cell.check_cell(x, y, self.cols, self.rows, self.grid_cells).fortytwo = True
+        
+        entry_exit = [
+            self.config[ConfigOptions.ENTRY],
+            self.config[ConfigOptions.EXIT]
+        ]
+        for x, y in entry_exit:
+            if Cell.check_cell(x, y, self.cols, self.rows, self.grid_cells).fortytwo:
+                raise ValueError(
+                    f"{Colors.RED}ERROR: "
+                    f"{Colors.RESET}Entry or Exit cannot be on the 42 pattern.\n"
+                )
 
     def display_maze(self) -> None:
+        print("\n[Displaying Maze ...]")
         count = 0
         try:
             os.remove(self.config[ConfigOptions.OUTPUT_FILE])
         except OSError:
             pass
         for cell in self.grid_cells:
-            cell.display(self.config[ConfigOptions.OUTPUT_FILE])
+            self.display += cell.display()
             count += 1
             if count % self.cols == 0:
-                file = open(self.config[ConfigOptions.OUTPUT_FILE], 'a')
-                file.write('\n')
-                file.close()
+                self.display += '\n'
+        with open(self.config[ConfigOptions.OUTPUT_FILE], 'w') as file:
+            file.write(self.display)
