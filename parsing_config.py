@@ -11,6 +11,7 @@ def check_config() -> Dict[ConfigOptions, Any]:
     exit: List[int] = []
     output: str
     perfect: bool
+    fortytwo: bool
 
     print("\n=== Analyzing Configurations ===\n")
     if not len(sys.argv) == 2:
@@ -25,7 +26,6 @@ def check_config() -> Dict[ConfigOptions, Any]:
     try:
         with open(file_name, 'r') as file:
             for line in file:
-                print(line)
                 key, value = line.split('=')
                 # check config formatting
                 try:
@@ -94,6 +94,17 @@ def check_config() -> Dict[ConfigOptions, Any]:
             "2) Entry and Exit coordinates belong in the maze\n"
             "3) Entry and Exit are not the same coordinates"
         )
+    
+    # check if 42 fits
+    if width < 9 or height < 7:
+        fortytwo = False
+        print(
+            f"{Colors.YELLOW}WARNING: "
+            f"{Colors.RESET}Size is too small to insert the '42' pattern."
+        )
+    else:
+        fortytwo = True
+
     print(
         f"{Colors.GREEN}SUCCESS: "
         f"{Colors.RESET}Configuration file successfully analyzed."
@@ -104,5 +115,6 @@ def check_config() -> Dict[ConfigOptions, Any]:
         ConfigOptions.ENTRY: entry,
         ConfigOptions.EXIT: exit,
         ConfigOptions.OUTPUT_FILE: output,
-        ConfigOptions.PERFECT: perfect
+        ConfigOptions.PERFECT: perfect,
+        ConfigOptions.FORTYTWO: fortytwo
     }
