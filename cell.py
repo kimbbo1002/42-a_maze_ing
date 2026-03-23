@@ -36,12 +36,12 @@ class Cell:
             return False
         return grid_cells[find_index(x, y)]
     
-    def is_large_open_area(self, x: int, y: int, cols: int, rows: int, grid_cells: list) -> bool:
+    def is_large_open_area(self, cols: int, rows: int, grid_cells: list) -> bool:
         count = 0
         for dy in range(-1, 2):
             for dx in range(-1, 2):
-                nx = x + dx
-                ny = y + dy
+                nx = self.x + dx
+                ny = self.y + dy
                 if 0 <= nx < cols and 0 <= ny < rows:
                     if not Cell.check_cell(nx, ny, cols, rows, grid_cells).visited:
                         continue
