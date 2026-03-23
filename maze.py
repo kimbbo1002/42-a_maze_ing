@@ -1,7 +1,7 @@
 import random
 import os
 from typing import Dict, Any, List
-from Enums import ConfigOptions, Colors
+from enums import ConfigOptions, Colors
 from cell import Cell
 
 

@@ -1,6 +1,6 @@
 import sys
 from typing import Dict, Any, List
-from Enums import Colors, ConfigOptions
+from enums import Colors, ConfigOptions
 
 
 def check_config() -> Dict[ConfigOptions, Any]:

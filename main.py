@@ -1,5 +1,5 @@
 from typing import Dict, Any
-from Enums import Colors, ConfigOptions
+from enums import Colors, ConfigOptions
 from parsing_config import check_config
 from maze import Maze
 
