@@ -1,8 +1,7 @@
 from typing import Dict, Any
 from enums import Colors, ConfigOptions
-from parsing_config import check_config
+from config import check_config
 from maze import Maze
-
 
 
 def main() -> None:
@@ -11,18 +10,12 @@ def main() -> None:
     try:
         # phase1: reading from config file
         config = check_config()
-        # print(config)
-
-        # phase2: generating random maze
-        maze = Maze(config)
-        maze.generate_maze()
-        maze.display_maze()
+        
         
     except Exception as e:
         print(e)
         return
-    
-    
 
 
-main()
+if __name__ == "__main__":
+    main()
