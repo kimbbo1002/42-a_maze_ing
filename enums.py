@@ -6,6 +6,8 @@ class Colors:
     GREEN = "\033[1;32m"
     YELLOW = "\033[1;33m"
     RESET = "\033[0m"
+    BOLD  = "\033[1m"
+    DIM   = "\033[2m"
 
 
 class ConfigOptions(Enum):

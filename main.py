@@ -1,20 +1,9 @@
-from typing import Dict, Any
-from enums import Colors, ConfigOptions
-from config import check_config
-from maze import Maze
+from MazeGenerator import MazeGenerator
 
 
 def main() -> None:
-    config: Dict[ConfigOptions, Any]
-
-    try:
-        # phase1: reading from config file
-        config = check_config()
-        
-        
-    except Exception as e:
-        print(e)
-        return
+    maze = MazeGenerator(None)
+    maze.generate_maze()
 
 
 if __name__ == "__main__":

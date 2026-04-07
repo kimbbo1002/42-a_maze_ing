@@ -15,8 +15,11 @@ class Cell:
         self.walls = {'N': True, 'E': True, 'S': True, 'W': True}
         self.visited = False
         self.fortytwo = False
+        self.path = False
+        self.entry = False
+        self.exit = False
 
-    def display(self) -> str:
+    def display_in_hex(self) -> str:
         bit = 0
         if self.walls['N']:
             bit |= 1
@@ -35,18 +38,6 @@ class Cell:
         if x < 0 or x > cols - 1 or y < 0 or y > rows - 1:
             return False
         return grid_cells[find_index(x, y)]
-    
-    def is_large_open_area(self, cols: int, rows: int, grid_cells: list) -> bool:
-        count = 0
-        for dy in range(-1, 2):
-            for dx in range(-1, 2):
-                nx = self.x + dx
-                ny = self.y + dy
-                if 0 <= nx < cols and 0 <= ny < rows:
-                    if not Cell.check_cell(nx, ny, cols, rows, grid_cells).visited:
-                        continue
-                    count += 1
-        return count >= 9
 
     def check_neighbors(self, cols: int, rows: int, grid_cells: list) -> Cell | bool:
         neighbors = []
@@ -56,14 +47,11 @@ class Cell:
         left = Cell.check_cell(self.x - 1, self.y, cols, rows, grid_cells)
         for n in [top, bottom, right, left]:
             if n and not n.visited and not n.fortytwo:
-                if n.is_large_open_area(n.x, n.y, cols, rows, grid_cells):
-                    continue
                 neighbors.append(n)
         
         return random.choice(neighbors) if neighbors else False
     
     def knock_down_wall(self, other: Cell, wall: str) -> None:
-        """Knock down the wall between cells self and other."""
         self.walls[wall] = False
         other.walls[Cell.wall_pairs[wall]] = False
 

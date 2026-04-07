@@ -1,25 +1,14 @@
 import random
 import os
-from typing import Dict, Any, List
 from enums import ConfigOptions, Colors
 from cell import Cell
 
 
 class Maze:
-    def __init__(self, config: dict, themes: dict) -> None:
+    def __init__(self, config: dict) -> None:
         self.config = config
         self.cols = config[ConfigOptions.WIDTH]
         self.rows = config[ConfigOptions.HEIGHT]
-        self.grid_cells = [Cell(col, row) for row in range(self.rows) for col in range(self.cols)]
-        self.seed = random.choice(range(1000))
-        self.display = ""
-        self.path = []
-        self.show_path = False
-        self.themes = themes
-        self.theme_name = list(themes.keys()[0])
-        self.colors = dict(themes[self.theme_name])
-    
-    def reset(self) -> None:
         self.grid_cells = [Cell(col, row) for row in range(self.rows) for col in range(self.cols)]
         self.seed = random.choice(range(1000))
         self.display = ""
@@ -49,6 +38,12 @@ class Maze:
 
         entry_x, entry_y = self.config[ConfigOptions.ENTRY]
         current_cell = Cell.check_cell(entry_x, entry_y, self.cols, self.rows, self.grid_cells)
+        current_cell.entry = True
+
+        exit_x, exit_y = self.config[ConfigOptions.EXIT]
+        exit_cell = Cell.check_cell(exit_x, exit_y, self.cols, self.rows, self.grid_cells)
+        exit_cell.exit = True
+
         stack = []
         cell_count = 1
         target = sum(1 for c in self.grid_cells if not c.fortytwo)
@@ -92,7 +87,7 @@ class Maze:
                 )
 
 
-    def get_path(self, draw_fn: callable) -> None:
+    def get_path(self) -> None:
         entry_x, entry_y = self.config[ConfigOptions.ENTRY]
         exit_x, exit_y = self.config[ConfigOptions.EXIT]
         entry = Cell.check_cell(entry_x, entry_y, self.cols, self.rows, self.grid_cells)
@@ -104,7 +99,7 @@ class Maze:
 
         while stack:
             current = stack.pop()
-            if current is exit:
+            if current == exit:
                 break
             for wall, (dx, dy) in direction.items():
                 if not current.walls[wall]:
@@ -114,59 +109,35 @@ class Maze:
                         stack.append(next)
         
         path_cell = exit
+        tmp_path = []
         while path_cell is not None:
-            self.path.append(path_cell)
+            tmp_path.append(path_cell)
+            path_cell.path = True
             path_cell = visited.get(path_cell)
-        self.path.reverse()
+        tmp_path.reverse()
 
-        draw_fn(self.grid_cells, self.cols, self.colors, self.path)
+        for i in range(len(tmp_path) - 1):
+            current = tmp_path[i]
+            next = tmp_path[i + 1]
 
+            dx = next.x - current.x
+            dy = next.y - current.y
 
-    def get_path_output(self) -> None:
-        entry_x, entry_y = self.config[ConfigOptions.ENTRY]
-        exit_x, exit_y = self.config[ConfigOptions.EXIT]
-        entry = Cell.check_cell(entry_x, entry_y, self.cols, self.rows, self.grid_cells)
-        exit = Cell.check_cell(exit_x, exit_y, self.cols, self.rows, self.grid_cells)
-
-        direction = {'N': (0,-1), 'S': (0,1), 'E': (1,0), 'W': (-1,0)}
-        stack = [entry]
-        visited = {entry: None}
-
-        while stack:
-            current = stack.pop()
-            if current is exit:
-                break
-            for wall, (dx, dy) in direction.items():
-                if not current.walls[wall]:
-                    next = Cell.check_cell(current.x + dx, current.y + dy, self.cols, self.rows, self.grid_cells)
-                    if next and next not in visited:
-                        visited[next] = current
-                        stack.append(next)
-        
-        path = []
-        path_cell = exit
-        while visited[path_cell][0] is not None:
-            before, now = visited[path_cell]
-            path.append(now)
-            path_cell = before
-        
-        path.reverse
-        return path
-
-
-    def toggle_path(self, draw_fn: callable) -> None:
-        self.show_path = not self.show_path
-        if self.show_path and not self.path:
-            self.get_path(draw_fn)
-        else:
-            draw_fn(self.grid_cells, self.cols, self.colors, self.path if self.show_path else None)
+            if dx == 1:
+                self.path.append('E')
+            elif dx == -1:
+                self.path.append('W')
+            elif dy == 1:
+                self.path.append('S')
+            elif dy == -1:
+                self.path.append('N')
 
 
     def display_output_file(self) -> None:
         print("\n[Displaying Maze ...]")
         count = 0
         for cell in self.grid_cells:
-            self.display += cell.display()
+            self.display += cell.display_in_hex()
             count += 1
             if count % self.cols == 0:
                 self.display += '\n'
@@ -175,7 +146,7 @@ class Maze:
         exit_x,  exit_y  = self.config[ConfigOptions.EXIT]
         self.display += f"\n\n{entry_x},{entry_y}\n"
         self.display += f"{exit_x},{exit_y}\n"
-        self.display += "".join(self.get_path_output()) + "\n"
+        self.display += "".join(self.path) + "\n"
 
         try:
             os.remove(self.config[ConfigOptions.OUTPUT_FILE])

@@ -1,6 +1,6 @@
 import sys
 from typing import List
-from pydantic import BaseModel, field_validator, model_validator
+from pydantic import BaseModel, field_validator, model_validator, ValidationError
 from enums import Colors, ConfigOptions
 
 
@@ -10,7 +10,7 @@ class Config(BaseModel):
     entry: List[int]
     exit: List[int]
     output_file: str
-    perfect: bool
+    perfect: str
     fortytwo: bool = False
 
     @field_validator("output_file")
@@ -25,6 +25,13 @@ class Config(BaseModel):
     def check_entry_exit(cls, value: List[int]) -> List[int]:
         if len(value) != 2:
             raise ValueError("ENTRY / EXIT must be two comma-separated integers")
+        return value
+    
+    @field_validator("perfect")
+    @classmethod
+    def check_perfect(cls, value: str) -> str:
+        if not value.lower().capitalize() in ["True", "False"]:
+            raise ValueError("PERFECT must be set as True or False")
         return value
     
     @model_validator(mode="after")
@@ -55,9 +62,11 @@ def parse_raw_config(file_name: str) -> dict:
         for line in f:
             line = line.strip()
             if not line or "=" not in line:
-                continue
+                raise ValueError
             key, _, value = line.partition("=")
-            raw[key.strip()] = value.strip()
+            raw[key.strip().upper()] = value.strip()
+    if not len(raw) == 6:
+        raise ValueError
     
     return {
         "width": int(raw[ConfigOptions.WIDTH.value]),
@@ -65,7 +74,7 @@ def parse_raw_config(file_name: str) -> dict:
         "entry": [int(x) for x in raw[ConfigOptions.ENTRY.value].split(",")],
         "exit": [int(x) for x in raw[ConfigOptions.EXIT.value].split(",")],
         "output_file": raw[ConfigOptions.OUTPUT_FILE.value],
-        "perfect": raw[ConfigOptions.PERFECT.value] == "True",
+        "perfect": raw[ConfigOptions.PERFECT.value],
     }
 
 
@@ -98,6 +107,9 @@ def check_config() -> dict:
     
     try:
         config = Config(**raw)
+    except ValidationError as e:
+        for err in e.errors():
+            raise ValueError(f"{Colors.RED}ERROR: {Colors.RESET}{err["msg"]}")
     except Exception as e:
         raise ValueError(f"{Colors.RED}ERROR: {Colors.RESET}{e}")
     
