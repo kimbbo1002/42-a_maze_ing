@@ -3,10 +3,11 @@ from config import check_config
 from typing import Optional
 import random
 
+
 class MazeGenerator:
     def __init__(self, seed: Optional[int]) -> None:
         self.seed = seed if seed else random.choice(range(1000))
-    
+
     def generate_maze(self) -> Optional[Maze]:
         try:
             config = check_config()

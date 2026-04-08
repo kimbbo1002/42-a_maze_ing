@@ -9,15 +9,16 @@ class Maze:
         self.config = config
         self.cols = config[ConfigOptions.WIDTH]
         self.rows = config[ConfigOptions.HEIGHT]
-        self.grid_cells = [Cell(col, row) for row in range(self.rows) for col in range(self.cols)]
+        self.grid_cells = [Cell(col, row) for row in range(self.rows)
+                           for col in range(self.cols)]
         self.seed = random.choice(range(1000))
         self.display = ""
         self.path = []
         self.show_path = False
-    
+
     def set_seed(self, seed: int) -> None:
         self.seed = seed
-    
+
     def remove_walls(self, current: Cell, next: Cell) -> None:
         dx = current.x - next.x
         if dx == 1:
@@ -30,18 +31,20 @@ class Maze:
             current.knock_down_wall(next, 'N')
         elif dy == -1:
             current.knock_down_wall(next, 'S')
-    
+
     def generate_maze(self) -> None:
         print("\n[Generating Maze ...]")
         if self.config[ConfigOptions.FORTYTWO]:
             self.add_42_pattern()
 
         entry_x, entry_y = self.config[ConfigOptions.ENTRY]
-        current_cell = Cell.check_cell(entry_x, entry_y, self.cols, self.rows, self.grid_cells)
+        current_cell = Cell.check_cell(entry_x, entry_y, self.cols,
+                                       self.rows, self.grid_cells)
         current_cell.entry = True
 
         exit_x, exit_y = self.config[ConfigOptions.EXIT]
-        exit_cell = Cell.check_cell(exit_x, exit_y, self.cols, self.rows, self.grid_cells)
+        exit_cell = Cell.check_cell(exit_x, exit_y, self.cols,
+                                    self.rows, self.grid_cells)
         exit_cell.exit = True
 
         stack = []
@@ -51,7 +54,8 @@ class Maze:
         random.seed(self.seed)
         while cell_count < target:
             current_cell.visited = True
-            next_cell = current_cell.check_neighbors(self.cols, self.rows, self.grid_cells)
+            next_cell = current_cell.check_neighbors(self.cols, self.rows,
+                                                     self.grid_cells)
             if next_cell:
                 next_cell.visited = True
                 cell_count += 1
@@ -61,39 +65,42 @@ class Maze:
             elif stack:
                 current_cell = stack.pop()
 
-
     def add_42_pattern(self) -> None:
         mid_x = self.cols // 2
         mid_y = self.rows // 2
-        
+
         pattern_coordinates = [
-            (-3,-2),(-3,-1),(-3, 0),(-2, 0),(-1, 0),(-1, 1),(-1, 2),
-            ( 1,-2),( 2,-2),( 3,-2),( 3,-1),( 3, 0),( 2, 0),( 1, 0),
-            ( 1, 1),( 1, 2),( 2, 2),( 3, 2)
+            (-3, -2), (-3, -1), (-3, 0), (-2, 0), (-1, 0), (-1, 1), (-1, 2),
+            (1, -2), (2, -2), (3, -2), (3, -1), (3, 0), (2, 0), (1, 0),
+            (1, 1), (1, 2), (2, 2), (3, 2)
         ]
 
         for dx, dy in pattern_coordinates:
-            Cell.check_cell(mid_x + dx, mid_y + dy, self.cols, self.rows, self.grid_cells).fortytwo = True
-        
+            Cell.check_cell(mid_x + dx, mid_y + dy, self.cols,
+                            self.rows, self.grid_cells).fortytwo = True
+
         entry_exit = [
             self.config[ConfigOptions.ENTRY],
             self.config[ConfigOptions.EXIT]
         ]
         for x, y in entry_exit:
-            if Cell.check_cell(x, y, self.cols, self.rows, self.grid_cells).fortytwo:
+            if Cell.check_cell(x, y, self.cols, self.rows,
+                               self.grid_cells).fortytwo:
                 raise ValueError(
                     f"{Colors.RED}ERROR: "
-                    f"{Colors.RESET}Entry or Exit cannot be on the 42 pattern.\n"
+                    f"{Colors.RESET}Entry or Exit cannot be "
+                    "on the 42 pattern.\n"
                 )
-
 
     def get_path(self) -> None:
         entry_x, entry_y = self.config[ConfigOptions.ENTRY]
         exit_x, exit_y = self.config[ConfigOptions.EXIT]
-        entry = Cell.check_cell(entry_x, entry_y, self.cols, self.rows, self.grid_cells)
-        exit = Cell.check_cell(exit_x, exit_y, self.cols, self.rows, self.grid_cells)
+        entry = Cell.check_cell(entry_x, entry_y, self.cols,
+                                self.rows, self.grid_cells)
+        exit = Cell.check_cell(exit_x, exit_y, self.cols,
+                               self.rows, self.grid_cells)
 
-        direction = {'N': (0,-1), 'S': (0,1), 'E': (1,0), 'W': (-1,0)}
+        direction = {'N': (0, -1), 'S': (0, 1), 'E': (1, 0), 'W': (-1, 0)}
         stack = [entry]
         visited = {entry: None}
 
@@ -103,11 +110,13 @@ class Maze:
                 break
             for wall, (dx, dy) in direction.items():
                 if not current.walls[wall]:
-                    next = Cell.check_cell(current.x + dx, current.y + dy, self.cols, self.rows, self.grid_cells)
+                    next = Cell.check_cell(
+                        current.x + dx, current.y + dy,
+                        self.cols, self.rows, self.grid_cells)
                     if next and next not in visited:
                         visited[next] = current
                         stack.append(next)
-        
+
         path_cell = exit
         tmp_path = []
         while path_cell is not None:
@@ -132,7 +141,6 @@ class Maze:
             elif dy == -1:
                 self.path.append('N')
 
-
     def display_output_file(self) -> None:
         print("\n[Displaying Maze ...]")
         count = 0
@@ -143,7 +151,7 @@ class Maze:
                 self.display += '\n'
 
         entry_x, entry_y = self.config[ConfigOptions.ENTRY]
-        exit_x,  exit_y  = self.config[ConfigOptions.EXIT]
+        exit_x, exit_y = self.config[ConfigOptions.EXIT]
         self.display += f"\n\n{entry_x},{entry_y}\n"
         self.display += f"{exit_x},{exit_y}\n"
         self.display += "".join(self.path) + "\n"
@@ -154,4 +162,3 @@ class Maze:
             pass
         with open(self.config[ConfigOptions.OUTPUT_FILE], 'w') as file:
             file.write(self.display)
-        

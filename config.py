@@ -1,6 +1,11 @@
 import sys
 from typing import List
-from pydantic import BaseModel, field_validator, model_validator, ValidationError
+from pydantic import (
+    BaseModel,
+    field_validator,
+    model_validator,
+    ValidationError
+)
 from enums import Colors, ConfigOptions
 
 
@@ -19,21 +24,23 @@ class Config(BaseModel):
         if not value.strip().endswith(".txt"):
             raise ValueError("OUTPUT_FILE must have a .txt extension")
         return value.strip()
-    
+
     @field_validator("entry", "exit")
     @classmethod
     def check_entry_exit(cls, value: List[int]) -> List[int]:
         if len(value) != 2:
-            raise ValueError("ENTRY / EXIT must be two comma-separated integers")
+            raise ValueError(
+                "ENTRY / EXIT must be two comma-separated integers"
+            )
         return value
-    
+
     @field_validator("perfect")
     @classmethod
     def check_perfect(cls, value: str) -> str:
         if not value.lower().capitalize() in ["True", "False"]:
             raise ValueError("PERFECT must be set as True or False")
         return value
-    
+
     @model_validator(mode="after")
     def check_maze_logic(self) -> "Config":
         w, h = self.width, self.height
@@ -45,7 +52,7 @@ class Config(BaseModel):
             raise ValueError("Exit coordinates are out of maze bound")
         if self.entry == self.exit:
             raise ValueError("Entry and Exit cannot be the same coordinates")
-        
+
         self.fortytwo = w >= 9 and h >= 7
         if not self.fortytwo:
             print(
@@ -67,7 +74,7 @@ def parse_raw_config(file_name: str) -> dict:
             raw[key.strip().upper()] = value.strip()
     if not len(raw) == 6:
         raise ValueError
-    
+
     return {
         "width": int(raw[ConfigOptions.WIDTH.value]),
         "height": int(raw[ConfigOptions.HEIGHT.value]),
@@ -87,7 +94,7 @@ def check_config() -> dict:
             "Wrong number of arguments.\n"
             "(example) python3 a_maze_ing.py config.txt"
         )
-    
+
     file_name = sys.argv[1]
     try:
         raw = parse_raw_config(file_name)
@@ -104,7 +111,7 @@ def check_config() -> dict:
             "WIDTH=20\nHEIGHT=15\nENTRY=0,0\nEXIT=19,14\n"
             "OUTPUT_FILE=maze.txt\nPERFECT=True"
         )
-    
+
     try:
         config = Config(**raw)
     except ValidationError as e:
@@ -112,7 +119,7 @@ def check_config() -> dict:
             raise ValueError(f"{Colors.RED}ERROR: {Colors.RESET}{err["msg"]}")
     except Exception as e:
         raise ValueError(f"{Colors.RED}ERROR: {Colors.RESET}{e}")
-    
+
     print(
         f"{Colors.GREEN}SUCCESS: {Colors.RESET}"
         "Configuration file successfully analyzed."

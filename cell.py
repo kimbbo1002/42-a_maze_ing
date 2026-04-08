@@ -29,17 +29,20 @@ class Cell:
             bit |= 1 << 2
         if self.walls['W']:
             bit |= 1 << 3
-        
+
         return (format(bit, 'X'))
 
     @staticmethod
-    def check_cell(x: int, y: int, cols: int, rows: int, grid_cells: list) -> Cell | bool:
-        find_index = lambda x, y: x + y * cols # 2D grid into a 1D list
+    def check_cell(
+        x: int, y: int, cols: int, rows: int, grid_cells: list
+    ) -> Cell | bool:
         if x < 0 or x > cols - 1 or y < 0 or y > rows - 1:
             return False
-        return grid_cells[find_index(x, y)]
+        return grid_cells[x + y * cols]  # 2D grid into a 1D list
 
-    def check_neighbors(self, cols: int, rows: int, grid_cells: list) -> Cell | bool:
+    def check_neighbors(
+            self, cols: int, rows: int, grid_cells: list
+    ) -> Cell | bool:
         neighbors = []
         top = Cell.check_cell(self.x, self.y - 1, cols, rows, grid_cells)
         bottom = Cell.check_cell(self.x, self.y + 1, cols, rows, grid_cells)
@@ -48,10 +51,9 @@ class Cell:
         for n in [top, bottom, right, left]:
             if n and not n.visited and not n.fortytwo:
                 neighbors.append(n)
-        
+
         return random.choice(neighbors) if neighbors else False
-    
+
     def knock_down_wall(self, other: Cell, wall: str) -> None:
         self.walls[wall] = False
         other.walls[Cell.wall_pairs[wall]] = False
-
