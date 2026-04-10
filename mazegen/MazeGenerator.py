@@ -1,5 +1,5 @@
-from maze import Maze
-from config import check_config
+from mazegen import Maze
+from src import check_config
 from typing import Optional
 import random
 

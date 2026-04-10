@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-from MazeGenerator import MazeGenerator
-from display_maze import display_maze
+from mazegen import MazeGenerator
+from src import display_maze
 
 
 def main() -> None:

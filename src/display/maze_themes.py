@@ -1,4 +1,4 @@
-COLOR_SCHEMES = [
+COLOR_SETTINGS = [
     {
         "name":     "Matrix",
         "wall":     "\033[48;5;232m",

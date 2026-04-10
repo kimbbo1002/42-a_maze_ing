@@ -2,8 +2,8 @@ import random
 import sys
 import tty
 import termios
-from maze import Maze
-from maze_themes import COLOR_SCHEMES
+from mazegen import Maze
+from src import COLOR_SETTINGS
 
 RESET = "\033[0m"
 CLEAR = "\033[2J\033[H"
@@ -95,10 +95,10 @@ def render_controls(color_name: str, show_path: bool) -> str:
 
 
 def display_maze(maze) -> None:
-    color_index = random.randint(0, len(COLOR_SCHEMES) - 1)
+    color_index = random.randint(0, len(COLOR_SETTINGS) - 1)
 
     while True:
-        colors = COLOR_SCHEMES[color_index]
+        colors = COLOR_SETTINGS[color_index]
 
         output = get_maze_output(maze, colors, maze.show_path)
         output += render_controls(colors["name"], maze.show_path)
@@ -112,7 +112,7 @@ def display_maze(maze) -> None:
             break
 
         elif key == 'c':
-            color_index = (color_index + 1) % len(COLOR_SCHEMES)
+            color_index = (color_index + 1) % len(COLOR_SETTINGS)
 
         elif key == 'p':
             maze.show_path = not maze.show_path

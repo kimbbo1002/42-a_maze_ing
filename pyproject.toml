@@ -1,6 +1,7 @@
 [project]
 name = "mazegen"
 version = "1.0.0"
+packages = [{include = "mazegen"}]
 description = ""
 authors = [
     {name = "bokim, yghergho"}

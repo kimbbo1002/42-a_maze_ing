@@ -6,7 +6,7 @@ from pydantic import (
     model_validator,
     ValidationError
 )
-from enums import Colors, ConfigOptions
+from mazegen import Colors, ConfigOptions
 
 
 class Config(BaseModel):
