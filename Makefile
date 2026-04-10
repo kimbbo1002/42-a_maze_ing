@@ -23,11 +23,18 @@ lint-strict:
 clean:
 	rm -rf `find . -type d -name "__pycache__"`
 	rm -rf .mypy_cache
-	rm -rf output.txt
 
-vclean: clean
+fclean: clean
+	rm -rf output.txt
 	rm -rf $(VENV)
 	rm -rf poetry.lock
+	rm -rf dist
+	rm -rf mazegen-1.0.0-py3-none-any.whl
+
+build:
+	poetry build
+	cp dist/mazegen-1.0.0-py3-none-any.whl ./
+	rm -rf dist
 
 
-.PHONY: install run debug clean lint lint-strict vclean
+.PHONY: install run debug clean lint lint-strict fclean build

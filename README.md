@@ -7,6 +7,65 @@ _This project has been created as part of the 42 curriculum by \<bokim> and \<yg
 
 ## Instructions
 
+To start, run the following command to install a virtual environment using poetry and create all dependencies needed
+```
+make install
+``` 
+
+<br>
+
+Once everything is set up, run this command to generate the maze and display it (you must provide a ```config_file.txt```)
+```
+make run
+```
+*The maze will be displayed on your terminal with an available render control allowing you to switch colors, re-generate a new maze, show/hide the path from entry to exit or quit.*
+
+<br>
+
+To run the project in debug mode using Python's built-in debugger (`pdb`), run:
+
+```bash
+make debug
+```
+
+*The program will pause at the first line, allowing you to step through the code interactively.*
+
+*Useful `pdb` commands:*
+- *`n` — execute the next line*
+- *`s` — step into a function*
+- *`c` — continue until the next breakpoint*
+- *`q` — quit the debugger*
+
+<br>
+
+The following rule will build the package `.whl` for module reusability as specified in the subject and place it at the root of the repository
+```
+make build
+```
+<br>
+
+If you want to check wether the project respects the flake8 norm and ensures consistent type hints across the codebase, run this
+```
+make lint
+```
+*or this for strict checks*
+```
+make lint-strict
+```
+
+<br>
+
+In order to clean the project from cache directories, run this command
+```
+make clean
+```
+
+*or this one to reset it to its original state, removing virtual environment as well as files/directories generated during the process (`.lock`, `.tar`, `.whl`, `output.txt`, `dist`)*
+```
+make fclean
+```
+<br>
+
 ## Technical Implementation 
 For this project, our team implemented the Depth-First Search (DFS) algorithm, specifically utilizing an iterative approach with explicit stacks.
 

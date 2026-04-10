@@ -86,11 +86,13 @@ def get_maze_output(maze, colors: dict, show_path: bool) -> str:
 def render_controls(color_name: str, show_path: bool) -> str:
     path_status = "ON ✓" if show_path else "OFF"
     return (
+        f"\n  ==== A-MAZE-ING render control ====\n"
         f"\n  Theme : {color_name}\n"
         f"  [C] Change Maze colors\n"
         f"  [P] Path : {path_status}\n"
-        f"  [R] Regenerate Maze\n"
+        f"  [R] Re-generate a new Maze\n"
         f"  [Q] Quit\n"
+        f"  Your choice : "
     )
 
 

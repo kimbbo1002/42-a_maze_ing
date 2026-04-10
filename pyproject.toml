@@ -2,7 +2,7 @@
 name = "mazegen"
 version = "1.0.0"
 packages = [{include = "mazegen"}]
-description = ""
+description = "A reusable maze generator package"
 authors = [
     {name = "bokim, yghergho"}
 ]
