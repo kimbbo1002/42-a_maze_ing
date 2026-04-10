@@ -8,6 +8,7 @@ class Colors:
     RESET = "\033[0m"
     BOLD = "\033[1m"
     DIM = "\033[2m"
+    BLACK = "\033[40m"
 
 
 class ConfigOptions(Enum):

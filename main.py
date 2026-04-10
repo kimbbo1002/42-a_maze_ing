@@ -1,9 +1,12 @@
+#!/usr/bin/env python3
 from MazeGenerator import MazeGenerator
+from display_maze import display_maze
 
 
 def main() -> None:
-    maze = MazeGenerator(None)
-    maze.generate_maze()
+    generator = MazeGenerator(None)
+    maze = generator.generate_maze()
+    display_maze(maze)
 
 
 if __name__ == "__main__":

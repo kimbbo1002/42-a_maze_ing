@@ -142,7 +142,7 @@ class Maze:
                 self.path.append('N')
 
     def display_output_file(self) -> None:
-        print("\n[Displaying Maze ...]")
+        print("\n[Displaying Maze ...]\n")
         count = 0
         for cell in self.grid_cells:
             self.display += cell.display_in_hex()
