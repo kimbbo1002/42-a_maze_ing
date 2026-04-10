@@ -1,7 +1,7 @@
 import random
 import os
-from mazegen import ConfigOptions, Colors
-from mazegen import Cell
+from .enums import ConfigOptions, Colors
+from .cell import Cell
 
 
 class Maze:

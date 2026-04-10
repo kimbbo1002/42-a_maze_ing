@@ -2,8 +2,8 @@ import random
 import sys
 import tty
 import termios
-from mazegen import Maze
-from src import COLOR_SETTINGS
+from ..mazegen import Maze
+from .maze_themes import COLOR_SETTINGS
 
 RESET = "\033[0m"
 CLEAR = "\033[2J\033[H"
@@ -118,6 +118,7 @@ def display_maze(maze) -> None:
             maze.show_path = not maze.show_path
 
         elif key == 'r':
+            CLEAR
             show_path = maze.show_path
             maze = Maze(maze.config)
             maze.generate_maze()

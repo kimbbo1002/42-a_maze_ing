@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from mazegen import MazeGenerator
+from src import MazeGenerator
 from src import display_maze
 
 
