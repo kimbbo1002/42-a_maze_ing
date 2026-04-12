@@ -1,18 +1,19 @@
-[project]
+[tool.poetry]
 name = "mazegen"
 version = "1.0.0"
-packages = [{include = "mazegen"}]
 description = "A reusable maze generator package"
-authors = [
-    {name = "bokim, yghergho"}
-]
+authors = ["bokim, yghergho"]
 readme = "README.md"
-requires-python = ">=3.10"
-dependencies = [
-    "pydantic (>=2.12.5,<3.0.0)",
-    "pynput (>=1.8.1,<2.0.0)"
-]
+packages = [{ include = "mazegen" }]
 
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+pydantic = ">=2.12.5,<3.0.0"
+pynput = ">=1.8.1,<2.0.0"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "*"
+mypy = "*"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

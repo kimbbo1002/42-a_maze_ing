@@ -1,8 +1,8 @@
-from .mazegen import Colors, ConfigOptions
-from .mazegen.config import check_config
-from .mazegen import Cell
-from .mazegen import Maze
-from .mazegen import MazeGenerator
+from .generation import Colors, ConfigOptions
+from .generation.config import check_config
+from .generation import Cell
+from .generation import Maze
+from .generation import MazeGenerator
 from .display.display_maze import display_maze
 
 

@@ -56,7 +56,7 @@ class Config(BaseModel):
         self.fortytwo = w >= 9 and h >= 7
         if not self.fortytwo:
             print(
-                f"{Colors.YELLOW}WARNING: {Colors.RESET}"
+                f"{Colors.YELLOW}PARSING WARNING: {Colors.RESET}"
                 "Size is too small to insert the '42' pattern."
             )
 
@@ -90,7 +90,7 @@ def check_config() -> dict:
 
     if len(sys.argv) != 2:
         raise ValueError(
-            f"{Colors.RED}ERROR: {Colors.RESET}"
+            f"{Colors.RED}PARSING ERROR: {Colors.RESET}"
             "Wrong number of arguments.\n"
             "(example) python3 a_maze_ing.py config.txt"
         )
@@ -100,12 +100,12 @@ def check_config() -> dict:
         raw = parse_raw_config(file_name)
     except FileNotFoundError:
         raise FileNotFoundError(
-            f"{Colors.RED}ERROR: {Colors.RESET}"
+            f"{Colors.RED}PARSING ERROR: {Colors.RESET}"
             f"File ({file_name}) could not be found."
         )
     except (KeyError, ValueError):
         raise ValueError(
-            f"{Colors.RED}ERROR: {Colors.RESET}"
+            f"{Colors.RED}PARSING ERROR: {Colors.RESET}"
             "Wrong configuration formatting.\n"
             "Mandatory keys with example values:\n"
             "WIDTH=20\nHEIGHT=15\nENTRY=0,0\nEXIT=19,14\n"
@@ -116,12 +116,15 @@ def check_config() -> dict:
         config = Config(**raw)
     except ValidationError as e:
         for err in e.errors():
-            raise ValueError(f"{Colors.RED}ERROR: {Colors.RESET}{err["msg"]}")
+            raise ValueError(
+                f"{Colors.RED}PARSING ERROR: {Colors.RESET}"
+                f"{err["msg"]}"
+            )
     except Exception as e:
-        raise ValueError(f"{Colors.RED}ERROR: {Colors.RESET}{e}")
+        raise ValueError(f"{Colors.RED}PARSING ERROR: {Colors.RESET}{e}")
 
     print(
-        f"{Colors.GREEN}SUCCESS: {Colors.RESET}"
+        f"{Colors.GREEN}PARSING SUCCESS: {Colors.RESET}"
         "Configuration file successfully analyzed."
     )
 

@@ -18,4 +18,4 @@ class MazeGenerator:
             maze.display_output_file()
             return maze
         except Exception as e:
-            print(e)
+            raise ValueError(f"{e}")

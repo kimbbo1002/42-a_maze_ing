@@ -1,12 +1,15 @@
 #!/usr/bin/env python3
-from src import MazeGenerator
-from src import display_maze
+from mazegen import MazeGenerator
+from mazegen import display_maze
 
 
 def main() -> None:
-    generator = MazeGenerator(None)
-    maze = generator.generate_maze()
-    display_maze(maze)
+    try:
+        generator = MazeGenerator(None)
+        maze = generator.generate_maze()
+        display_maze(maze)
+    except Exception as e:
+        print(e)
 
 
 if __name__ == "__main__":

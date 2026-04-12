@@ -2,7 +2,7 @@ import random
 import sys
 import tty
 import termios
-from ..mazegen import Maze
+from ..generation import Maze
 from .maze_themes import COLOR_SETTINGS
 
 RESET = "\033[0m"

@@ -173,3 +173,6 @@ To ensure the project is scalable, type-safe, and easy to distribute, we integra
 
 ## Resources
 ### Use of AI
+- Concept clarification and simplification
+- Debugging assistance
+- Documentation (README) drafting and refinement

@@ -13,12 +13,12 @@ debug:
 	$(PYTHON) -m pdb $(MAIN) $(CONFIG)
 
 lint:
-	flake8 .
-	mypy . --explicit-package-bases --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
+	poetry run flake8 .
+	poetry run mypy . --explicit-package-bases --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict:
-	flake8
-	mypy . --explicit-package-bases --strict
+	poetry run flake8
+	poetry run mypy . --explicit-package-bases --strict
 
 clean:
 	rm -rf `find . -type d -name "__pycache__"`
@@ -33,7 +33,7 @@ fclean: clean
 
 build:
 	poetry build
-	cp dist/mazegen-1.0.0-py3-none-any.whl ./
+	cp dist/*.whl .
 	rm -rf dist
 
 
