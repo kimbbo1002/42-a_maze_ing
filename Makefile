@@ -13,7 +13,7 @@ debug:
 	$(PYTHON) -m pdb $(MAIN) $(CONFIG)
 
 lint:
-	poetry run flake8 .
+	poetry run flake8
 	poetry run mypy . --explicit-package-bases --warn-return-any --warn-unused-ignores --ignore-missing-imports --disallow-untyped-defs --check-untyped-defs
 
 lint-strict:
@@ -26,7 +26,6 @@ clean:
 
 fclean: clean
 	rm -rf output.txt
-	rm -rf $(VENV)
 	rm -rf poetry.lock
 	rm -rf dist
 	rm -rf mazegen-1.0.0-py3-none-any.whl

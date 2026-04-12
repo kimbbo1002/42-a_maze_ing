@@ -60,7 +60,7 @@ In order to clean the project from cache directories, run this command
 make clean
 ```
 
-*or this one to reset it to its original state, removing virtual environment as well as files/directories generated during the process (`.lock`, `.tar`, `.whl`, `output.txt`, `dist`)*
+*or this one to reset it to its original state, removing files/directories generated during the process (`.lock`, `.tar`, `.whl`, `output.txt`, `dist`)*
 ```
 make fclean
 ```

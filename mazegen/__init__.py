@@ -1,5 +1,5 @@
 from .generation import Colors, ConfigOptions
-from .generation.config import check_config
+from .generation import check_config
 from .generation import Cell
 from .generation import Maze
 from .generation import MazeGenerator

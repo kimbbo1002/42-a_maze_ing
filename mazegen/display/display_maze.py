@@ -2,10 +2,12 @@ import random
 import sys
 import tty
 import termios
-from ..generation import Maze
+from typing import Any
+from mazegen import Cell
+from ..generation import Maze, Colors
 from .maze_themes import COLOR_SETTINGS
 
-RESET = "\033[0m"
+Colors.RESET = "\033[0m"
 CLEAR = "\033[2J\033[H"
 CELL_W = "  "  # width cell (in spaces)
 CELL_H = 1  # height cell (in lines)
@@ -22,7 +24,7 @@ def read_key() -> str:
         termios.tcsetattr(fd, termios.TCSADRAIN, old_settings)
 
 
-def get_cell_color(cell, colors: dict, show_path: bool) -> str:
+def get_cell_color(cell: Cell, colors: dict[str, str], show_path: bool) -> Any:
     if cell.entry:
         return colors["entry"]
     if cell.exit:
@@ -34,45 +36,47 @@ def get_cell_color(cell, colors: dict, show_path: bool) -> str:
     return colors["cell"]
 
 
-def get_maze_output(maze, colors: dict, show_path: bool) -> str:
+def get_maze_output(maze: Maze, colors: dict[str, str], show_path: bool
+                    ) -> Any:
     output = CLEAR
     wall_color = colors["wall"]
 
-    # 1. Bordure supérieure (Mur Nord global)
-    top_border = wall_color + (CELL_W * (2 * maze.cols + 1)) + RESET + "\n"
+    # 1. top border (global north wall)
+    top_border = wall_color + (
+        CELL_W * (2 * maze.cols + 1)) + Colors.RESET + "\n"
     output += top_border * CELL_H
 
     for row in range(maze.rows):
-        line_up = wall_color + CELL_W + RESET
-        line_low = wall_color + CELL_W + RESET
+        line_up = wall_color + CELL_W + Colors.RESET
+        line_low = wall_color + CELL_W + Colors.RESET
 
         for col in range(maze.cols):
             cell = maze.grid_cells[row * maze.cols + col]
             color = get_cell_color(cell, colors, show_path)
 
             # Cell + East Wall
-            line_up += color + CELL_W + RESET
+            line_up += color + CELL_W + Colors.RESET
             if cell.walls['E']:
-                line_up += wall_color + CELL_W + RESET
+                line_up += wall_color + CELL_W + Colors.RESET
             else:
                 next_cell = maze.grid_cells[row * maze.cols + col + 1]
                 # path color only if current.path and next.path (avoid outflow)
                 if show_path and cell.path and next_cell.path:
-                    line_up += colors['path'] + CELL_W + RESET
+                    line_up += colors['path'] + CELL_W + Colors.RESET
                 else:
-                    line_up += colors['cell'] + CELL_W + RESET
+                    line_up += colors['cell'] + CELL_W + Colors.RESET
 
             # South Wall + Corner
             if cell.walls['S']:
-                line_low += wall_color + CELL_W + RESET
+                line_low += wall_color + CELL_W + Colors.RESET
             else:
                 next_cell = maze.grid_cells[(row + 1) * maze.cols + col]
                 if show_path and cell.path and next_cell.path:
-                    line_low += colors['path'] + CELL_W + RESET
+                    line_low += colors['path'] + CELL_W + Colors.RESET
                 else:
-                    line_low += colors['cell'] + CELL_W + RESET
+                    line_low += colors['cell'] + CELL_W + Colors.RESET
             # corner (always a wall btw 4 cells)
-            line_low += wall_color + CELL_W + RESET
+            line_low += wall_color + CELL_W + Colors.RESET
 
         # repeat each line * CELL_H time
         for _ in range(CELL_H):
@@ -96,7 +100,7 @@ def render_controls(color_name: str, show_path: bool) -> str:
     )
 
 
-def display_maze(maze) -> None:
+def display_maze(maze: Maze) -> None:
     color_index = random.randint(0, len(COLOR_SETTINGS) - 1)
 
     while True:
