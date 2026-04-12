@@ -2,11 +2,11 @@ import random
 import os
 from .enums import ConfigOptions, Colors
 from .cell import Cell
-from typing import List, Dict
+from typing import List, Dict, Any
 
 
 class Maze:
-    def __init__(self, config: dict) -> None:
+    def __init__(self, config: dict[ConfigOptions, Any]) -> None:
         self.config = config
         self.cols = config[ConfigOptions.WIDTH]
         self.rows = config[ConfigOptions.HEIGHT]

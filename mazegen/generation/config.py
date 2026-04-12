@@ -1,5 +1,5 @@
 import sys
-from typing import List
+from typing import List, Dict, Any
 from pydantic import (
     BaseModel,
     field_validator,
@@ -63,7 +63,7 @@ class Config(BaseModel):
         return self
 
 
-def parse_raw_config(file_name: str) -> dict:
+def parse_raw_config(file_name: str) -> Dict[str, Any]:
     raw = {}
     with open(file_name, "r") as f:
         for line in f:
@@ -85,7 +85,7 @@ def parse_raw_config(file_name: str) -> dict:
     }
 
 
-def check_config() -> dict:
+def check_config() -> Dict[ConfigOptions, Any]:
     print("\n[Analyzing Configurations ...]")
 
     if len(sys.argv) != 2:
