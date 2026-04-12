@@ -2,6 +2,7 @@ import random
 import os
 from .enums import ConfigOptions, Colors
 from .cell import Cell
+from typing import List, Dict
 
 
 class Maze:
@@ -13,7 +14,7 @@ class Maze:
                            for col in range(self.cols)]
         self.seed = random.choice(range(1000))
         self.display = ""
-        self.path = []
+        self.path: List[str] = []
         self.show_path = False
 
     def set_seed(self, seed: int) -> None:
@@ -40,12 +41,14 @@ class Maze:
         entry_x, entry_y = self.config[ConfigOptions.ENTRY]
         current_cell = Cell.check_cell(entry_x, entry_y, self.cols,
                                        self.rows, self.grid_cells)
-        current_cell.entry = True
+        if current_cell:
+            current_cell.entry = True
 
         exit_x, exit_y = self.config[ConfigOptions.EXIT]
         exit_cell = Cell.check_cell(exit_x, exit_y, self.cols,
                                     self.rows, self.grid_cells)
-        exit_cell.exit = True
+        if exit_cell:
+            exit_cell.exit = True
 
         stack = []
         cell_count = 1
@@ -53,17 +56,18 @@ class Maze:
 
         random.seed(self.seed)
         while cell_count < target:
-            current_cell.visited = True
-            next_cell = current_cell.check_neighbors(self.cols, self.rows,
-                                                     self.grid_cells)
-            if next_cell:
-                next_cell.visited = True
-                cell_count += 1
-                stack.append(current_cell)
-                self.remove_walls(current_cell, next_cell)
-                current_cell = next_cell
-            elif stack:
-                current_cell = stack.pop()
+            if current_cell:
+                current_cell.visited = True
+                next_cell = current_cell.check_neighbors(self.cols, self.rows,
+                                                         self.grid_cells)
+                if next_cell:
+                    next_cell.visited = True
+                    cell_count += 1
+                    stack.append(current_cell)
+                    self.remove_walls(current_cell, next_cell)
+                    current_cell = next_cell
+                elif stack:
+                    current_cell = stack.pop()
 
     def add_42_pattern(self) -> None:
         mid_x = self.cols // 2
@@ -76,16 +80,19 @@ class Maze:
         ]
 
         for dx, dy in pattern_coordinates:
-            Cell.check_cell(mid_x + dx, mid_y + dy, self.cols,
-                            self.rows, self.grid_cells).fortytwo = True
+            pattern_cell = Cell.check_cell(mid_x + dx, mid_y + dy, self.cols,
+                                           self.rows, self.grid_cells)
+            if pattern_cell:
+                pattern_cell.fortytwo = True
 
         entry_exit = [
             self.config[ConfigOptions.ENTRY],
             self.config[ConfigOptions.EXIT]
         ]
         for x, y in entry_exit:
-            if Cell.check_cell(x, y, self.cols, self.rows,
-                               self.grid_cells).fortytwo:
+            e_cell = Cell.check_cell(x, y, self.cols, self.rows,
+                                     self.grid_cells)
+            if e_cell and e_cell.fortytwo:
                 raise ValueError(
                     f"{Colors.RED}ERROR: "
                     f"{Colors.RESET}Entry or Exit cannot be "
@@ -102,14 +109,14 @@ class Maze:
 
         direction = {'N': (0, -1), 'S': (0, 1), 'E': (1, 0), 'W': (-1, 0)}
         stack = [entry]
-        visited = {entry: None}
+        visited: Dict[Cell | None, Cell | None] = {entry: None}
 
         while stack:
             current = stack.pop()
             if current == exit:
                 break
             for wall, (dx, dy) in direction.items():
-                if not current.walls[wall]:
+                if current and not current.walls[wall]:
                     next = Cell.check_cell(
                         current.x + dx, current.y + dy,
                         self.cols, self.rows, self.grid_cells)

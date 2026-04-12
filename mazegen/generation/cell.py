@@ -1,4 +1,5 @@
 from __future__ import annotations
+from typing import List
 import random
 
 
@@ -34,15 +35,15 @@ class Cell:
 
     @staticmethod
     def check_cell(
-        x: int, y: int, cols: int, rows: int, grid_cells: list
-    ) -> Cell | bool:
+        x: int, y: int, cols: int, rows: int, grid_cells: List[Cell]
+    ) -> Cell | None:
         if x < 0 or x > cols - 1 or y < 0 or y > rows - 1:
-            return False
+            return None
         return grid_cells[x + y * cols]  # 2D grid into a 1D list
 
     def check_neighbors(
-            self, cols: int, rows: int, grid_cells: list
-    ) -> Cell | bool:
+            self, cols: int, rows: int, grid_cells: List[Cell]
+    ) -> Cell | None:
         neighbors = []
         top = Cell.check_cell(self.x, self.y - 1, cols, rows, grid_cells)
         bottom = Cell.check_cell(self.x, self.y + 1, cols, rows, grid_cells)
@@ -52,7 +53,7 @@ class Cell:
             if n and not n.visited and not n.fortytwo:
                 neighbors.append(n)
 
-        return random.choice(neighbors) if neighbors else False
+        return random.choice(neighbors) if neighbors else None
 
     def knock_down_wall(self, other: Cell, wall: str) -> None:
         self.walls[wall] = False
