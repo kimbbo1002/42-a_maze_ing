@@ -80,7 +80,7 @@ class Config(BaseModel):
 
 def parse_raw_config(file_name: str) -> Dict[str, Any]:
     """
-    Parse the raw configuration file and return a dictionary of the values.     
+    Parse the raw configuration file and return a dictionary of the values.
     """
     raw = {}
     with open(file_name, "r") as f:

@@ -45,7 +45,8 @@ def get_cell_color(cell: Cell, colors: dict[str, str], show_path: bool) -> Any:
 def get_maze_output(maze: Maze, colors: dict[str, str], show_path: bool
                     ) -> Any:
     """
-    Generate the visual output for the maze based on its cells and display settings.
+    Generate the visual output for the maze based
+    on its cells and display settings.
     """
     output = CLEAR
     wall_color = colors["wall"]
@@ -115,7 +116,7 @@ def render_controls(color_name: str, show_path: bool) -> str:
 def display_maze(maze: Maze) -> None:
     """
     Display the maze in the terminal.
-    
+
     """
     color_index = random.randint(0, len(COLOR_SETTINGS) - 1)
 
