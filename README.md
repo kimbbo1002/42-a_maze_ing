@@ -188,6 +188,15 @@ print("Solution Path:", maze_instance.path)
 # Output example: ['E', 'S', 'E', 'N', 'E']
 ```
 
+4. Accessing the Documentation
+The documentation is inside the package:
+```python
+from importlib.resources import files
+
+doc = files("mazegen").joinpath("doc.md").read_text()
+print(doc)
+```
+
 ## Project Management
 ### Roles
 This project was a collaborative effort with a clear division of responsibilities:
