@@ -15,6 +15,9 @@ pynput = ">=1.8.1,<2.0.0"
 flake8 = "*"
 mypy = "*"
 
+[tool.setuptools.package-data]
+your_package = ["*.md"]
+
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
