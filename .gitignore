@@ -1,0 +1,7 @@
+__pycache__
+.venv
+.mypy_cache
+output.txt
+poetry.lock
+test.py
+.vscode

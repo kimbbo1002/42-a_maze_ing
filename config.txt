@@ -1,6 +1,7 @@
-WIDTH=21
-HEIGHT=15
-ENTRY=0,0
-EXIT=20,14
+width=21
+#this is a comment
+HEIGHT=17
+ENTRY=0,1
+EXIT=2,5
 OUTPUT_FILE=output.txt
-PERFECT=True
+PERFECT=TRUE
