@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-from mazegen import MazeGenerator
-from mazegen import display_maze
-from mazegen import Colors
+from src import MazeGenerator, display_maze, Colors
 
 
 def main() -> None:

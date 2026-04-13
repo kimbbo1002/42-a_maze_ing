@@ -4,7 +4,7 @@ version = "1.0.0"
 description = "A reusable maze generator package"
 authors = ["bokim, yghergho"]
 readme = "README.md"
-packages = [{ include = "mazegen" }]
+packages = [{ include = "mazegen", from = "src" }]
 
 [tool.poetry.dependencies]
 python = ">=3.10,<4.0"

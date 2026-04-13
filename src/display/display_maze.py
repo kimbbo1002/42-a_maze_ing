@@ -3,8 +3,8 @@ import sys
 import tty
 import termios
 from typing import Any
-from mazegen import Cell
-from ..generation import Maze, Colors
+from src import Cell
+from ..mazegen import Maze, Colors
 from .maze_themes import COLOR_SETTINGS
 
 Colors.RESET = "\033[0m"

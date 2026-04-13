@@ -1,5 +1,4 @@
-from .maze import Maze
-from .config import check_config
+from . import Maze, check_config
 from typing import Optional
 import random
 

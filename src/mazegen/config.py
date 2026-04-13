@@ -120,7 +120,7 @@ def check_config() -> Dict[ConfigOptions, Any]:
         for err in e.errors():
             raise ValueError(
                 f"{Colors.RED}PARSING ERROR: {Colors.RESET}"
-                f"{err["msg"]}"
+                f"{err['msg']}"
             )
     except Exception as e:
         raise ValueError(f"{Colors.RED}PARSING ERROR: {Colors.RESET}{e}")
