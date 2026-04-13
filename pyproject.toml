@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "mazegen"
+version = "1.0.0"
+description = "A reusable maze generator package"
+authors = ["bokim, yghergho"]
+readme = "README.md"
+packages = [{ include = "mazegen", from = "src" }]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+pydantic = ">=2.12.5,<3.0.0"
+pynput = ">=1.8.1,<2.0.0"
+
+[tool.poetry.group.dev.dependencies]
+flake8 = "*"
+mypy = "*"
+
+[tool.setuptools.package-data]
+your_package = ["*.md"]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
