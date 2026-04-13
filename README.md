@@ -221,6 +221,10 @@ To ensure the project is scalable, type-safe, and easy to distribute, we integra
 - **Poetry**: Employed for dependency management and packaging. This allows other developers to install the project and its requirements with a single command, ensuring a consistent environment across different machines.
 
 ## Resources
+- [DFS Algorithm](https://www.geeksforgeeks.org/dsa/depth-first-search-or-dfs-for-a-graph/)
+- Maze generation:
+  - [Maze Generator](https://inventwithpython.com/recursion/chapter11.html)
+  - [Maze creation in Python](https://discuss.python.org/t/maze-creation-in-python/77030)
 ### Use of AI
 - Concept clarification and simplification
 - Debugging assistance
