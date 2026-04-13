@@ -10,6 +10,9 @@ from .enums import Colors, ConfigOptions
 
 
 class Config(BaseModel):
+    """
+    Configuration model for the maze generator.
+    """
     width: int
     height: int
     entry: List[int]
@@ -21,6 +24,9 @@ class Config(BaseModel):
     @field_validator("output_file")
     @classmethod
     def check_output_file(cls, value: str) -> str:
+        """
+        Check that the output file has a .txt extension.
+        """
         if not value.strip().endswith(".txt"):
             raise ValueError("OUTPUT_FILE must have a .txt extension")
         return value.strip()
@@ -28,6 +34,9 @@ class Config(BaseModel):
     @field_validator("entry", "exit")
     @classmethod
     def check_entry_exit(cls, value: List[int]) -> List[int]:
+        """
+        Check that entry and exit coordinates are valid.
+        """
         if len(value) != 2:
             raise ValueError(
                 "ENTRY / EXIT must be two comma-separated integers"
@@ -37,12 +46,18 @@ class Config(BaseModel):
     @field_validator("perfect")
     @classmethod
     def check_perfect(cls, value: str) -> str:
+        """
+        Check that the perfect parameter is a valid boolean string.
+        """
         if not value.lower().capitalize() in ["True", "False"]:
             raise ValueError("PERFECT must be set as True or False")
         return value
 
     @model_validator(mode="after")
     def check_maze_logic(self) -> "Config":
+        """
+        Check the logical consistency of the maze configuration.
+        """
         w, h = self.width, self.height
         if w <= 0 or h <= 0:
             raise ValueError("Width and Height must be greater than 0")
@@ -64,6 +79,9 @@ class Config(BaseModel):
 
 
 def parse_raw_config(file_name: str) -> Dict[str, Any]:
+    """
+    Parse the raw configuration file and return a dictionary of the values.     
+    """
     raw = {}
     with open(file_name, "r") as f:
         for line in f:
@@ -88,6 +106,9 @@ def parse_raw_config(file_name: str) -> Dict[str, Any]:
 
 
 def check_config() -> Dict[ConfigOptions, Any]:
+    """
+    Check the configuration file and return a dictionary of the values.
+    """
     print("\n[Analyzing Configurations ...]")
 
     if len(sys.argv) != 2:

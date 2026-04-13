@@ -14,6 +14,9 @@ CELL_H = 1  # height cell (in lines)
 
 
 def read_key() -> str:
+    """
+    Read a single keypress from the user.
+    """
     fd = sys.stdin.fileno()  # return 0 for input (keyboard)
     old_settings = termios.tcgetattr(fd)  # save current keyboard config
     try:
@@ -25,6 +28,9 @@ def read_key() -> str:
 
 
 def get_cell_color(cell: Cell, colors: dict[str, str], show_path: bool) -> Any:
+    """
+    Get the color for a cell based on its properties and display settings.
+    """
     if cell.entry:
         return colors["entry"]
     if cell.exit:
@@ -38,6 +44,9 @@ def get_cell_color(cell: Cell, colors: dict[str, str], show_path: bool) -> Any:
 
 def get_maze_output(maze: Maze, colors: dict[str, str], show_path: bool
                     ) -> Any:
+    """
+    Generate the visual output for the maze based on its cells and display settings.
+    """
     output = CLEAR
     wall_color = colors["wall"]
 
@@ -88,6 +97,9 @@ def get_maze_output(maze: Maze, colors: dict[str, str], show_path: bool
 
 
 def render_controls(color_name: str, show_path: bool) -> str:
+    """
+    Render the control options for the maze display.
+    """
     path_status = "ON ✓" if show_path else "OFF"
     return (
         f"\n  ==== A-MAZE-ING render control ====\n"
@@ -101,6 +113,10 @@ def render_controls(color_name: str, show_path: bool) -> str:
 
 
 def display_maze(maze: Maze) -> None:
+    """
+    Display the maze in the terminal.
+    
+    """
     color_index = random.randint(0, len(COLOR_SETTINGS) - 1)
 
     while True:

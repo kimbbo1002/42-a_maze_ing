@@ -5,3 +5,4 @@ output.txt
 poetry.lock
 *.whl
 test.py
+.vscode
