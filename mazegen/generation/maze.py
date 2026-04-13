@@ -159,7 +159,7 @@ class Maze:
 
         entry_x, entry_y = self.config[ConfigOptions.ENTRY]
         exit_x, exit_y = self.config[ConfigOptions.EXIT]
-        self.display += f"\n\n{entry_x},{entry_y}\n"
+        self.display += f"\n{entry_x},{entry_y}\n"
         self.display += f"{exit_x},{exit_y}\n"
         self.display += "".join(self.path) + "\n"
 
