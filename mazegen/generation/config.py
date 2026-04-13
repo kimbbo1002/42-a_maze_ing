@@ -67,6 +67,8 @@ def parse_raw_config(file_name: str) -> Dict[str, Any]:
     raw = {}
     with open(file_name, "r") as f:
         for line in f:
+            if line.startswith("#"):
+                continue
             line = line.strip()
             if not line or "=" not in line:
                 raise ValueError
