@@ -1,5 +1,7 @@
 _This project has been created as part of the 42 curriculum by \<bokim> and \<yghergho>_.
 
+# A-MAZE-ING
+
 ## Description
 - A Python-based maze generation and navigation tool that utilizes the Depth-First Search (DFS) algorithm. This project was developed to demonstrate modular Python design, stack-based logic, and terminal-based visualization.
 
@@ -7,64 +9,111 @@ _This project has been created as part of the 42 curriculum by \<bokim> and \<yg
 
 ## Instructions
 
-To start, run the following command to install a virtual environment using poetry and create all dependencies needed
+### Configuration File Instructions
+The application uses a simple key-value configuration file to define parameters. Each setting must be written on a separate line using the following format:
+```bash
+KEY=VALUE
 ```
+#### Example
+```bash
+WIDTH=21
+HEIGHT=15
+ENTRY=0,0
+EXIT=20,14
+OUTPUT_FILE=output.txt
+PERFECT=True
+```
+
+#### Parameters
+- WIDTH
+
+The width of the grid or maze. Must be a positive integer.
+- HEIGHT
+
+The height of the grid or maze. Must be a positive integer.
+- ENTRY
+
+The starting position, defined as x,y coordinates.
+Example: 0,0
+- EXIT
+
+The ending position, defined as x,y coordinates.
+Example: 20,14
+- OUTPUT_FILE
+
+The name (or path) of the file where the result will be saved.
+- PERFECT
+
+A boolean value (`True` or `False`).
+  - `True`: Generates a perfect maze (no loops, exactly one path between any two points).
+  - `False`: Allows multiple paths and loops.
+
+#### Notes
+- Variable names are **case-insensitive** (e.g., width, Width, and WIDTH are all valid).
+- Boolean values for PERFECT can be written as true or false (case-insensitive).
+- Coordinates must always be within the bounds defined by WIDTH and HEIGHT.
+- Whitespace around keys and values is ignored.
+---
+
+### Usage Instructions
+#### Installation
+To get started, install the virtual environment and all required dependencies using:
+```bash
 make install
-``` 
-
-<br>
-
-Once everything is set up, run this command to generate the maze and display it (you must provide a ```config_file.txt```)
 ```
+
+#### Running the Program
+After setup, you can generate and display a maze with:
+```bash
 make run
 ```
-*The maze will be displayed on your terminal with an available render control allowing you to switch colors, re-generate a new maze, show/hide the path from entry to exit or quit.*
+⚠️ Make sure to provide a `config_file.txt` before running.
 
-<br>
+The maze will appear directly in your terminal. Interactive controls allow you to:
+- Change colors
+- Generate a new maze
+- Toggle the solution path (entry → exit)
+- Quit the program
 
-To run the project in debug mode using Python's built-in debugger (`pdb`), run:
-
+#### Debug Mode
+To run the project with Python’s built-in debugger (`pdb`), use:
 ```bash
 make debug
 ```
+The program will pause at the first line, letting you step through execution interactively.
 
-*The program will pause at the first line, allowing you to step through the code interactively.*
+Common `pdb` commands:
+- `n` — execute the next line
+- `s` — step into a function
+- `c` — continue execution
+- `q` — quit the debugger
 
-*Useful `pdb` commands:*
-- *`n` — execute the next line*
-- *`s` — step into a function*
-- *`c` — continue until the next breakpoint*
-- *`q` — quit the debugger*
-
-<br>
-
-The following rule will build the package `.whl` for module reusability as specified in the subject and place it at the root of the repository
-```
+#### Build the Package
+To generate a `.whl` package for reuse, run:
+```bash
 make build
 ```
-<br>
+The built package will be placed at the root of the repository.
 
-If you want to check wether the project respects the flake8 norm and ensures consistent type hints across the codebase, run this
-```
+#### Linting
+To check code quality and ensure compliance with flake8 and type hints:
+```bash
 make lint
 ```
-*or this for strict checks*
-```
+For stricter validation:
+```bash
 make lint-strict
 ```
 
-<br>
-
-In order to clean the project from cache directories, run this command
-```
+#### Cleaning the Project
+Remove cache and temporary files with:
+```bash
 make clean
 ```
-
-*or this one to reset it to its original state, removing files/directories generated during the process (`.lock`, `.tar`, `.whl`, `output.txt`, `dist`)*
-```
+To fully reset the project (removes generated files such as `.lock`, `.tar`, `.whl`, `output.txt`, and `dist`):
+```bash
 make fclean
 ```
-<br>
 
 ## Technical Implementation 
 For this project, our team implemented the Depth-First Search (DFS) algorithm, specifically utilizing an iterative approach with explicit stacks.
