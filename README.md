@@ -76,7 +76,7 @@ The maze will appear directly in your terminal. Interactive controls allow you t
 - Quit the program
 
 #### Debug Mode
-To run the project with Python’s built-in debugger (`pdb`), use:
+To run the project with Python’s built-in debugger (`pdb`) use:
 ```bash
 make debug
 ```
@@ -110,7 +110,7 @@ Remove cache and temporary files with:
 ```bash
 make clean
 ```
-To fully reset the project (removes generated files such as `.lock`, `.tar`, `.whl`, `output.txt`, and `dist`):
+To fully reset the project (removes generated files such as `.lock`, `.tar`, `.whl`, `output.txt` and `dist`):
 ```bash
 make fclean
 ```
@@ -160,14 +160,14 @@ The MazeGenerator class acts as a high-level wrapper that manages the lifecycle 
 To integrate this into a different project, ensure the module is in your path and use the following implementation:
 1. Basic Example (Instantiating & Running)
 ```python
-from maze_module import MazeGenerator
+from mazegen import MazeGenerator
 
 # Create the generator instance
 # The seed is optional; if omitted, a random one is generated.
-gen = MazeGenerator(seed=123)
+generator = MazeGenerator(seed=123)
 
 # The generate_maze() method handles config, generation, and solving
-maze_instance = gen.generate_maze()
+maze_instance = generator.generate_maze()
 ```
 
 2. Accessing the Generated Structure
@@ -177,14 +177,14 @@ Once generated, you can programmatically access the maze's internal structure fo
 cells = maze_instance.grid_cells
 
 # Check wall status of a specific cell (e.g., the entry cell)
-print(cells[0].walls) # Returns {'N': True, 'S': False, ...}
+print("First cell walls: ", cells[0].walls) # Returns {'N': True, 'S': False, ...}
 ```
 
 3. Accessing the Solution
 The solution is pre-calculated and stored within the returned object:
 ```python
 # Access the solution path as a list of directions
-print(f"Solution Path: {maze_instance.path}") 
+print("Solution Path:", maze_instance.path) 
 # Output example: ['E', 'S', 'E', 'N', 'E']
 ```
 
