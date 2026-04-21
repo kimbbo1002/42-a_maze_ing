@@ -3,6 +3,5 @@ __pycache__
 .mypy_cache
 output.txt
 poetry.lock
-*.whl
 test.py
 .vscode

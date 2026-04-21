@@ -68,6 +68,10 @@ class Maze:
                     current_cell = next_cell
                 elif stack:
                     current_cell = stack.pop()
+        print(
+            f"{Colors.GREEN}GENERATION SUCCESS: {Colors.RESET}"
+            "Maze was successfully generated."
+        )
 
     def add_42_pattern(self) -> None:
         mid_x = self.cols // 2
@@ -149,7 +153,7 @@ class Maze:
                 self.path.append('N')
 
     def display_output_file(self) -> None:
-        print("\n[Displaying Maze ...]\n")
+        print("\n[Writing to OUTPUT_FILE ...]")
         count = 0
         for cell in self.grid_cells:
             self.display += cell.display_in_hex()
@@ -169,3 +173,8 @@ class Maze:
             pass
         with open(self.config[ConfigOptions.OUTPUT_FILE], 'w') as file:
             file.write(self.display)
+
+        print(
+            f"{Colors.GREEN}OUTPUT SUCCESS: {Colors.RESET}"
+            "OUTPUT_FILE was successfully generated"
+        )
